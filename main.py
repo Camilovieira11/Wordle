@@ -1,14 +1,19 @@
 
 import os
+import requests
 
-palavra_secreta = 'cachorro'
+response = requests.get("https://random-word-api.herokuapp.com/word?lang=pt-br")
+palavra_secreta =  response.json()[0]
 letras_acertadas = ''
 numero_tentativas = 0
-
+limite_de_tentativas = len(palavra_secreta) 
 while True:
+    if limite_de_tentativas <= 0:
+        print('acabaram as tentativas')
+        break     
     letra_digitada = input('Digite uma letra: ')
     numero_tentativas += 1
-
+    limite_de_tentativas -= 1
     if len(letra_digitada) > 1:
         print('Digite apenas uma letra.')
         continue
@@ -24,11 +29,13 @@ while True:
             palavra_formada += '*'
 
     print('Palavra formada:', palavra_formada)
-
+    print("Tentativas restantes: ", limite_de_tentativas)
     if palavra_formada == palavra_secreta:
         os.system('clear')
         print('VOCÊ GANHOU!! PARABÉNS!')
         print('A palavra era', palavra_secreta)
         print('Tentativas:', numero_tentativas)
+        print('Tentativas restantes:', limite_de_tentativas)
         letras_acertadas = ''
         numero_tentativas = 0
+        limite_de_tentativas = 0
