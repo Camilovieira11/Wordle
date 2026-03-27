@@ -43,13 +43,19 @@ criar_tabela()
 # ---------------- JOGO ---------------- #
 
 # pega palavra da API
-response = requests.get("https://random-word-api.herokuapp.com/word?number=1&lang=pt-br")
-
-if response.status_code == 200:
-    palavra_secreta = response.json()[0]
-else:
-    print("Erro ao buscar palavra da API.")
-    exit()
+while True:
+  try:
+     response = requests.get("https://random-word-api.herokuapp.com/word?number=1&lang=pt-br")
+     
+     if response.status_code == 200:
+      palavra_secreta = response.json()[0]
+      
+    #Verificação se a palavra é maior que 6 caracter
+      if len(palavra_secreta) <= 6:
+          break
+  except:
+      continue
+      
 
 
 # salva no banco
