@@ -42,19 +42,30 @@ criar_tabela()
 
 # ---------------- JOGO ---------------- #
 
-# pega palavra da API
-while True:
-  try:
-     response = requests.get("https://random-word-api.herokuapp.com/word?number=1&lang=pt-br")
-     
-     if response.status_code == 200:
-      palavra_secreta = response.json()[0]
-      
-    #Verificação se a palavra é maior que 6 caracter
-      if len(palavra_secreta) <= 6:
-          break
-  except:
-      continue
+palavra_secreta = None
+
+print("Buscando palavra adequada...")
+
+while not palavra_secreta:
+    try:
+        # Pede 10 palavras aleatórias à API
+        response = requests.get("https://random-word-api.herokuapp.com/word?number=10&lang=pt-br")
+        
+        if response.status_code == 200:
+            lista_palavras = response.json()
+            
+            # Percorre a lista de 10 palavras recebidas
+            for p in lista_palavras:
+                if len(p) <= 6:
+                    palavra_secreta = p
+                    break # Encontrou uma, sai do loop 'for'
+            
+            # Se após o 'for' palavra_secreta ainda for None, 
+            # o 'while' rodará novamente para buscar mais 10.
+            
+    except Exception as e:
+        print(f"Erro na conexão: {e}")
+        continue
       
 
 
